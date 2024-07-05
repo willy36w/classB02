@@ -1,10 +1,10 @@
 <fieldset>
     <legend>帳號管理</legend>
-    <table class="tab">
+    <table class="tab ct">
         <tr>
-            <td class="clo">帳號</td>
-            <td class="clo">密碼</td>
-            <td class="clo">刪除</td>
+            <td class='clo'>帳號</td>
+            <td class='clo'>密碼</td>
+            <td class='clo'>刪除</td>
         </tr>
         <?php
         $users = $User->all();
@@ -24,10 +24,9 @@
         <button onclick="clear()">清空選取</button>
     </div>
 
+
     <h2>新增會員</h2>
 
-
-    <legend>會員註冊</legend>
     <!-- div+table>tr*5>td.clo+td>input:text -->
     <div style="color:red">*請設定您要註冊的帳號及密碼(最長12個字元)</div>
     <table>
@@ -86,7 +85,6 @@
 
         }
 
-
         function del() {
             let chks = $("input[type='checkbox']:checked")
             let ids = new Array();
@@ -97,7 +95,7 @@
                 $.post("./api/del_user.php", {
                     ids
                 }, () => {
-
+                    //ids.forEach(id => $(`input[value='${id}']`).parents('tr').remove())
                     location.reload();
                 })
             } else {
@@ -105,5 +103,4 @@
             }
         }
     </script>
-
 </fieldset>
