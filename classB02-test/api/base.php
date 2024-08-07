@@ -27,7 +27,7 @@ class DB
         if (isset($arg[0])) {
             if (is_array($arg[0])) {
                 $tmp = $this->a2s($arg[0]);
-                $sql .= " where " . join(" && " . $tmp);
+                $sql .= " where " . join(" && ", $tmp);
             } else {
                 $sql .= $arg[0];
             }
@@ -109,3 +109,17 @@ function dd($array)
     echo "</pre>";
 }
 $User = new DB('users');
+$Total = new DB('total');
+$News = new DB('news');
+
+
+if (!isset($_SESSION['total'])) {
+    if ($Total->count(['date' => date("Y-m-d")]) > 0) {
+        $total = $Total->find(['date' => date("Y-m-d")]);
+        $total['total']++;
+        $Total->save($total);
+    } else {
+        $Total->save(['date' => date("Y-m-d"), 'total' => 1]);
+    }
+    $_SESSION['total'] = $Total->find(['date' => date("Y-m-d")])['total'];
+}

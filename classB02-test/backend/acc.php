@@ -1,5 +1,31 @@
 <fieldset>
-    <legend>會員註冊</legend>
+    <legend>帳號管理</legend>
+    <table class="tab ct">
+        <tr>
+            <td class="clo">帳號</td>
+            <td class="clo">密碼</td>
+            <td class="clo">刪除</td>
+        </tr>
+        <?php
+        $users = $User->all();
+        foreach ($users as $user) {
+        ?>
+            <tr>
+                <td><?= $user['acc']; ?></td>
+                <td><?= str_repeat("*", strlen($user['pw'])); ?></td>
+                <td><input type="checkbox" name="del" value="<?= $user['id']; ?>"></td>
+            </tr>
+        <?php
+        }
+        ?>
+    </table>
+    <div class="ct">
+        <button onclick="del()">確定刪除</button>
+        <button onclick="clear()">清空選取</button>
+    </div>
+
+
+    <h2>新增會員</h2>
     <div style="color: red;">*請設定您要註冊的帳號及密碼(最長12個字元)</div>
     <table>
         <tr>
@@ -27,6 +53,7 @@
         </tr>
     </table>
 </fieldset>
+
 <script>
     function reg() {
         let user = {
@@ -49,7 +76,7 @@
                 } else {
                     $.post("./api/reg.php", user, (res) => {
                         // console.log(res)
-                        alert("註冊完成，歡迎加入")
+                        location.reload()
                     })
                 }
             })
@@ -57,7 +84,22 @@
 
     }
 
-    function clear() {
-
+    function del() {
+        let chks = $("input[type='checkbox']:checked")
+        let ids = new Array();
+        if (chks.length > 0) {
+            for (let i = 0; i < chks.length; i++) {
+                ids.push(chks[i].value)
+            }
+            $.post("./api/del_user.php", {
+                ids
+            }, () => {
+                // 下列這一段實務上外面工作常用
+                // ids.forEach(id => $(`input[value='${id}']`).parents('tr').remove())
+                location.reload();
+            })
+        } else {
+            alert("沒有帳號要刪除")
+        }
     }
 </script>
